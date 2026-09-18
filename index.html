@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>八島 — Producer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&family=Cormorant:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#000;
+    --white:#fff;
+    --mist:rgba(255,255,255,.62);
+    --ink:rgba(255,255,255,.14);
+    --serif-jp:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+    --serif-en:"Cormorant","Shippori Mincho",serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--black);
+    color:var(--white);
+    font-family:var(--serif-jp);
+    font-weight:400;
+    line-height:2;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ── 背景：八島の写真（固定） ─────────────────────────────
+     ここの url() を実際の写真に差し替えてください。
+     例: background-image:url("images/yajima.jpg");
+     現在は写真未設定のためプレースホルダー（グラデーション）です。 */
+  .portrait{
+    position:fixed;inset:0;z-index:0;
+    background-color:#000;
+    background-image:
+      radial-gradient(ellipse 55% 70% at 62% 45%, rgba(255,255,255,.22), transparent 70%),
+      linear-gradient(180deg,#000 0%,#0a0a0a 50%,#000 100%);
+    background-size:cover;
+    background-position:center 20%;
+    filter:grayscale(1) contrast(1.08);
+  }
+  /* 写真を暗く沈めて文字を立たせる層 */
+  .portrait::after{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.25) 50%, rgba(0,0,0,.55) 100%),
+      linear-gradient(180deg, rgba(0,0,0,.5) 0%, transparent 30%, transparent 70%, rgba(0,0,0,.85) 100%);
+  }
+
+  /* ── ナビ ───────────────────────────────────────────── */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:10;
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding:1.6rem 2rem;
+    mix-blend-mode:difference;
+  }
+  .nav a{color:var(--white);text-decoration:none}
+  .brand{font-size:1.15rem;letter-spacing:.3em;font-weight:600}
+  .brand small{
+    display:block;font-family:var(--serif-en);font-size:.8rem;
+    letter-spacing:.22em;font-weight:400;margin-top:.1rem;
+  }
+  .nav .to-talents{
+    font-family:var(--serif-en);font-size:1.05rem;letter-spacing:.18em;
+    padding-bottom:.15rem;border-bottom:1px solid var(--white);
+  }
+  .nav a:focus-visible{outline:1px solid var(--white);outline-offset:6px}
+
+  main{position:relative;z-index:1}
+
+  /* ── ヒーロー：縦書きの一言 ──────────────────────────── */
+  .hero{
+    min-height:100vh;
+    display:flex;justify-content:flex-end;align-items:flex-end;
+    padding:0 clamp(1.5rem,7vw,6rem) 12vh 0;
+  }
+  .hero h1{
+    writing-mode:vertical-rl;text-orientation:mixed;
+    font-size:clamp(1.9rem,4.4vw,3.6rem);
+    font-weight:400;letter-spacing:.18em;line-height:1.6;
+    max-height:78vh;
+    font-feature-settings:"palt";
+  }
+  .hero h1 span{display:block;margin-left:1.2em;font-size:.55em;letter-spacing:.3em;color:var(--mist)}
+
+  /* ── 格言：浮遊する言葉 ─────────────────────────────── */
+  .words{padding:6vh 0 10vh}
+  .word{
+    min-height:88vh;
+    display:flex;align-items:center;
+    padding:0 clamp(1.5rem,8vw,9rem);
+  }
+  .word:nth-child(even){justify-content:flex-end;text-align:right}
+  .word p{
+    max-width:22em;
+    font-size:clamp(1.25rem,2.1vw,1.85rem);
+    line-height:2.05;letter-spacing:.06em;
+    font-feature-settings:"palt";
+    opacity:0;transform:translateY(14px);
+    transition:opacity 1.4s ease, transform 1.4s ease;
+  }
+  .word.seen p{opacity:1;transform:none}
+  .word p em{font-style:normal;display:block;margin-top:1.2em;color:var(--mist);font-size:.75em;letter-spacing:.2em}
+  @media (prefers-reduced-motion:reduce){
+    .word p{opacity:1;transform:none;transition:none}
+  }
+
+  /* ── 方針 ───────────────────────────────────────────── */
+  .policy{
+    background:var(--white);color:var(--black);
+    padding:clamp(5rem,12vh,9rem) clamp(1.5rem,8vw,9rem);
+  }
+  .policy .inner{max-width:60rem;margin:0 auto;display:grid;grid-template-columns:1fr;gap:3.5rem}
+  @media(min-width:820px){.policy .inner{grid-template-columns:14rem 1fr;gap:5rem}}
+  .policy h2{
+    font-size:1rem;font-weight:600;letter-spacing:.4em;
+    writing-mode:vertical-rl;justify-self:start;line-height:1;
+  }
+  @media(max-width:819px){.policy h2{writing-mode:horizontal-tb}}
+  .policy ol{list-style:none;display:grid;gap:3rem}
+  .policy li h3{
+    font-size:clamp(1.35rem,2vw,1.7rem);font-weight:400;letter-spacing:.1em;
+    margin-bottom:.8rem;font-feature-settings:"palt";
+  }
+  .policy li p{max-width:36em;font-size:.98rem;line-height:2.1;color:rgba(0,0,0,.72)}
+
+  /* ── フッター ───────────────────────────────────────── */
+  footer{
+    background:var(--black);
+    padding:clamp(5rem,14vh,10rem) clamp(1.5rem,8vw,9rem) 3rem;
+    display:flex;flex-direction:column;gap:3rem;
+  }
+  footer .cta{
+    color:var(--white);text-decoration:none;
+    font-size:clamp(1.6rem,3vw,2.4rem);letter-spacing:.15em;
+    display:inline-block;align-self:flex-start;
+    border-bottom:1px solid var(--white);padding-bottom:.4rem;
+    font-feature-settings:"palt";
+  }
+  footer .cta:focus-visible{outline:1px solid var(--white);outline-offset:8px}
+  footer small{font-family:var(--serif-en);letter-spacing:.2em;color:var(--mist);font-size:.85rem}
+</style>
+</head>
+<body>
+
+<div class="portrait" role="img" aria-label="八島のポートレート"></div>
+
+<nav class="nav">
+  <a class="brand" href="index.html">八島<small>Yajima</small></a>
+  <a class="to-talents" href="talents.html">Talents</a>
+</nav>
+
+<main>
+  <section class="hero">
+    <h1>売れるかどうかは、才能じゃない。<br>誰に見つけられたかだ。<span>八島</span></h1>
+  </section>
+
+  <section class="words" aria-label="八島の言葉">
+    <div class="word"><p>プロデュースとは、飾ることじゃない。<br>その人の余計なものを、静かに取り除く作業だ。<em>言葉、一</em></p></div>
+    <div class="word"><p>流行は追わない。<br>俺が触れたものが、あとから流行と呼ばれる。<em>言葉、二</em></p></div>
+    <div class="word"><p>努力は誰でもできる。<br>正しい場所で努力させるのが、俺の仕事だ。<em>言葉、三</em></p></div>
+    <div class="word"><p>光の当て方を変えれば、<br>石は宝石になる。<br>俺は石を選ばない。光を選ぶ。<em>言葉、四</em></p></div>
+    <div class="word"><p>一番になれとは言わない。<br>比べる相手がいなくなるまで、やれと言っている。<em>言葉、五</em></p></div>
+    <div class="word"><p>結果が出るまで、黙って隣にいる。<br>結果が出たら、黙って離れる。<br>それが本物の裏方だ。<em>言葉、六</em></p></div>
+  </section>
+
+  <section class="policy" aria-labelledby="policy-title">
+    <div class="inner">
+      <h2 id="policy-title">プロデュースの方針</h2>
+      <ol>
+        <li>
+          <h3>引き算から始める</h3>
+          <p>足すのは誰でもできる。最初にやるのは、その人が「こうあるべき」と思い込んでいる姿を一枚ずつ剥がすこと。残ったものだけが、長く売れる。</p>
+        </li>
+        <li>
+          <h3>最初の百人を、正しく選ぶ</h3>
+          <p>百万人に届ける前に、どの百人に届けるかを決める。最初のファンの質が、その後の全てを決める。数は追わない。人を選ぶ。</p>
+        </li>
+        <li>
+          <h3>本人より先に、本人を信じる</h3>
+          <p>タレントが自分を疑う夜は、必ず来る。その夜より前に、こちらが信じ切っておく。信頼は、結果が出てから積むものではない。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <a class="cta" href="talents.html">八島が手掛けたタレントを見る</a>
+  <small>&copy; Yajima</small>
+</footer>
+
+<script>
+  // スクロールに応じて格言を一度だけ浮かび上がらせる
+  (function(){
+    var words=document.querySelectorAll('.word');
+    if(!('IntersectionObserver' in window)){words.forEach(function(w){w.classList.add('seen')});return;}
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('seen');io.unobserve(e.target);} });
+    },{threshold:.45});
+    words.forEach(function(w){io.observe(w)});
+  })();
+</script>
+</body>
+</html>
