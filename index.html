@@ -32,58 +32,20 @@
      例: background-image:url("images/yajima.jpg");
      現在は写真未設定のためプレースホルダー（グラデーション）です。 */
   .portrait{
-2
-position: fixed;
-3
-inset: 0;
-4
-z-index: 0;
-5
- 
-6
-background-color: #000;
-7
- 
-8
-background-image:
-9
-radial-gradient(
-10
-ellipse 55% 70% at 62% 45%,
-11
-rgba(255,255,255,.22),
-12
-transparent 70%
-13
-),
-14
-linear-gradient(
-15
-180deg,
-16
-#000 0%,
-17
-#0a0a0a 50%,
-18
-#000 100%
-19
-),
-20
-url("images/yajima.PNG");
-21
- 
-22
-background-size: cover;
-23
-background-position: center 20%;
-24
-background-repeat: no-repeat;
-25
- 
-26
-filter: grayscale(1) contrast(1.08);
-27
-}
+    position:fixed;inset:0;z-index:0;
+    background-color:#000;
+    background-image:url("images/yajima.PNG");
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-position:center 20%;
+    filter:grayscale(1) contrast(1.08);
+  }
+  /* 画像が見つからない場合のフォールバック（デバッグ用の視覚確認にも使えます） */
+  .portrait[data-fallback]{
+    background-image:
+      radial-gradient(ellipse 55% 70% at 62% 45%, rgba(255,255,255,.22), transparent 70%),
+      linear-gradient(180deg,#000 0%,#0a0a0a 50%,#000 100%);
+  }
   /* 写真を暗く沈めて文字を立たせる層 */
   .portrait::after{
     content:"";position:absolute;inset:0;
